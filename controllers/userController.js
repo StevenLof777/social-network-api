@@ -27,7 +27,6 @@ const getSingleUser = (req, res) => {
         return res.status(500).json(err);
     })
 }
-// Doesn't work
 const updateUser = (req, res) => {
     User.findOneAndUpdate(
         { _id: req.params.userId },
@@ -41,14 +40,15 @@ const updateUser = (req, res) => {
     })
 }
 
-// Doesn't work
 const deleteUser = (req, res) => {
     User.findOneAndDelete({ _id: req.params.userId })
-    .then((users) => res.json(users))
-    .catch(err => {
-        console.log(err)
-        return res.status(500).json(err);
-    })
+    .then((user) =>
+    !user
+      ? res.status(404).json({ message: 'No user with that ID' })
+      : Student.deleteMany({ _id: { $in: user.students } })
+    )
+    .then(() => res.json({ message: 'User deleted' }))
+    .catch((err) => res.status(500).json(err));
 }
 
 module.exports = { createUser, getUsers, getSingleUser, updateUser, deleteUser }
