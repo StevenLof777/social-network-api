@@ -12,17 +12,9 @@ const userSchema = new Schema(
             type: String,
             required: true,
             unique: true,
-            // Match
-            
         },
-        // thoughts: [Thought],
-        friends: [
-            {
-                // How to reference a user id
-                type: Schema.Types.ObjectId,
-                ref: 'User'
-            }
-        ]
+        thoughts: [Thought],
+        friends: []
     },
     {
         versionKey: false

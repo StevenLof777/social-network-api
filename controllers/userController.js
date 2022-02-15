@@ -52,11 +52,32 @@ const deleteUser = (req, res) => {
 }
 
 const addFriend = (req, res) => {
-    console.log('Add friend')
+    console.log('add friend')
+    User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $addToSet: { friends: req.body } },
+        { runValidators: true, new: true }
+      )
+        .then((user) =>
+          !user
+            ? res.status(404).json({ message: 'No user with this id!' })
+            : res.json(user)
+        )
+        .catch((err) => res.status(500).json(err));
 }
 
 const deleteFriend = (req, res) => {
-    console.log('Remove friend')
+    User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $pull: { friends: { responseId: req.params.tagId } } },
+        { runValidators: true, new: true }
+      )
+        .then((user) =>
+          !user
+            ? res.status(404).json({ message: 'No user with this id!' })
+            : res.json(user)
+        )
+        .catch((err) => res.status(500).json(err));
 }
 
 module.exports = { createUser, getUsers, getSingleUser, updateUser, deleteUser, addFriend, deleteFriend }
