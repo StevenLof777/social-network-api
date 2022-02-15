@@ -9,7 +9,7 @@ const thoughtSchema = new Schema(
             minlength: 1,
         },
         createdAt: {
-            // Date
+            timeOfCreation: Date,
             // Set default value to the current timestamp
             // Use a getter method to format the timestamp on query
         },
