@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose');
+const Thought = require('./Thought');
 
 const userSchema = new Schema(
     {
@@ -14,12 +15,14 @@ const userSchema = new Schema(
             // Match
             
         },
-        thoughts: {
-            // Array of _id values referencing the Thought model
-        },
-        friends: {
-            // Array of _id values referencing the User model (self-reference)
-        }
+        // thoughts: [Thought],
+        friends: [
+            {
+                // How to reference a user id
+                type: Schema.Types.ObjectId,
+                ref: 'User'
+            }
+        ]
     },
     {
         versionKey: false

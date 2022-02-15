@@ -51,4 +51,12 @@ const deleteUser = (req, res) => {
     .catch((err) => res.status(500).json(err));
 }
 
-module.exports = { createUser, getUsers, getSingleUser, updateUser, deleteUser }
+const addFriend = (req, res) => {
+    console.log('Add friend')
+}
+
+const deleteFriend = (req, res) => {
+    console.log('Remove friend')
+}
+
+module.exports = { createUser, getUsers, getSingleUser, updateUser, deleteUser, addFriend, deleteFriend }
