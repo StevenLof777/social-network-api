@@ -5,15 +5,14 @@ const userSchema = new Schema(
         username: {
             type: String,
             required: true,
-            // Trimmed?
-            // { $trim: { input: <string>,  chars: <string> } }
+            trim: true,
         },
         email: {
             type: String,
             required: true,
             unique: true,
             // Match
-            $match: {},
+            
         },
         thoughts: {
             // Array of _id values referencing the Thought model
@@ -22,6 +21,9 @@ const userSchema = new Schema(
             // Array of _id values referencing the User model (self-reference)
         }
     },
+    {
+        versionKey: false
+    }
 );
 
 const User = model('user', userSchema);
