@@ -40,15 +40,15 @@ const updateUser = (req, res) => {
         return res.status(500).json(err);
     })
 }
+
 // Doesn't work
-// const deleteUser = (req, res) => {
-//     User.findOneAndDelete({ _id: req.params.userId })
-//     .then((users) => res.json(users))
-//     .catch(err => {
-//         console.log(err)
-//         return res.status(500).json(err);
-//     })
-// }
-module.exports = { createUser, getUsers, getSingleUser, updateUser,
-    //  deleteUser
-     }
+const deleteUser = (req, res) => {
+    User.findOneAndDelete({ _id: req.params.userId })
+    .then((users) => res.json(users))
+    .catch(err => {
+        console.log(err)
+        return res.status(500).json(err);
+    })
+}
+
+module.exports = { createUser, getUsers, getSingleUser, updateUser, deleteUser }
