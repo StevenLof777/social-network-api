@@ -52,7 +52,6 @@ const deleteUser = (req, res) => {
 }
 
 const addFriend = (req, res) => {
-    console.log('add friend')
     User.findOneAndUpdate(
         { _id: req.params.userId },
         { $addToSet: { friends: req.body } },
