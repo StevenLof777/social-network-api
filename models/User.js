@@ -13,7 +13,7 @@ const userSchema = new Schema(
             required: true,
             unique: true,
         },
-        thoughts: [Thought],
+        // thoughts: [Thought],
         friends: []
     },
     {
