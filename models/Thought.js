@@ -1,6 +1,13 @@
 const { Schema, model } = require('mongoose');
 const User = require('./User')
 
+const reactionSchema = new Schema(
+  {
+    reactions: []
+  }
+)
+
+
 const thoughtSchema = new Schema(
     {
         thoughtText: {
@@ -13,17 +20,23 @@ const thoughtSchema = new Schema(
             type: Date,
             default: Date.now,
         },
-        username: [User],
-        reactions: []
+        // username: [User],
+        reactions: [
+          {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+          }
+        ]
     },
-    // Turn on later?
-    // {
-    //     toJSON: {
-    //       virtuals: true,
-    //     },
-    //     id: false,
-    //   }
+
+    {
+        toJSON: {
+          virtuals: true,
+        },
+        id: false,
+      }
 );
+
 
 thoughtSchema
   .virtual('getResponses')
