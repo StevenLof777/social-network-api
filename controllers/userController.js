@@ -52,11 +52,12 @@ const deleteUser = (req, res) => {
 }
 
 const addFriend = (req, res) => {
+    console.log()
     User.findOneAndUpdate(
         { _id: req.params.userId },
         // Am I targeting the userId?
-        { $addToSet: { friends: req.body.userId } },
-        { runValidators: true, new: true }
+        { $addToSet: { friends: req.params.friendId } },
+        { new: true }
       )
         .then((user) =>
           !user

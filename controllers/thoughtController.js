@@ -1,4 +1,5 @@
 // // match: [/.+@.+\..+/, 'Must be a valid email address!'],
+const User = require('../models/User')
 const Thought = require('../models/Thought')
 
 const getThoughts = (req, res) => {
@@ -15,7 +16,7 @@ const createThought = (req, res) => {
       .then((thought) => {
         return User.findOneAndUpdate(
           { _id: req.body.userId },
-          { $addToSet: { thoughts: thought._id } },
+          { $push: { thoughts: thought._id } },
           { new: true }
         );
       })
