@@ -3,7 +3,14 @@ const User = require('./User')
 
 const reactionSchema = new Schema(
   {
-    reactions: []
+    reactionId: {
+      type: Schema.Types.ObjectId,
+      // default: 
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
   }
 )
 
@@ -20,29 +27,24 @@ const thoughtSchema = new Schema(
             type: Date,
             default: Date.now,
         },
-        // username: [User],
-        reactions: [
-          {
-            type: Schema.Types.ObjectId,
-            ref: 'User'
-          }
-        ]
-    },
-
-    {
-        toJSON: {
-          virtuals: true,
+        username: {
+          type: String,
+          required: true
         },
-        id: false,
-      }
+        reactions: [reactionSchema]
+    },
+    {
+      toJSON: {
+        virtuals: true,
+      },
+      id: false,
+    }
 );
 
 
-thoughtSchema
-  .virtual('getResponses')
-  .get(function () {
-    return this.thoughts.length;
-  });
+thoughtSchema.virtual('reactionCount').get(function () {
+  return this.reactions.length;
+});
 
 const Thought = model('thought', thoughtSchema);
 
