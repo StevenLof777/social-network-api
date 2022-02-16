@@ -54,6 +54,7 @@ const deleteUser = (req, res) => {
 const addFriend = (req, res) => {
     User.findOneAndUpdate(
         { _id: req.params.userId },
+        // Am I targeting the userId?
         { $addToSet: { friends: req.body.userId } },
         { runValidators: true, new: true }
       )
