@@ -1,4 +1,4 @@
-// // match: [/.+@.+\..+/, 'Must be a valid email address!'],
+// match: [/.+@.+\..+/, 'Must be a valid email address!'],
 const User = require('../models/User')
 const Thought = require('../models/Thought')
 
