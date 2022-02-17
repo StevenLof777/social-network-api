@@ -66,9 +66,9 @@ const deleteThought = (req, res) => {
 }
 
 const addReaction = (req, res) => {
-    Thought.findOneAndUpdate(
+    Thought.create(
         { _id: req.params.thoughtId },
-        { $addToSet: { reactionBody: req.body.thoughtId } },
+        { $push: { reactionBody: req.body.thoughtId } },
         { runValidators: true, new: true }
       )
         .then((thought) =>
@@ -80,7 +80,7 @@ const addReaction = (req, res) => {
 }
 
 const deleteReaction = (req, res) => {
-    thought.findOneAndUpdate(
+    Thought.findOneAndUpdate(
         { _id: req.params.thoughtId },
         { $pull: { friends: { responseId: req.params.thoughtId } } },
         { runValidators: true, new: true }
