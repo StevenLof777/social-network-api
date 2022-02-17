@@ -1,9 +1,6 @@
 const { Schema, model } = require('mongoose');
+const emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
 
-// UserSchema.path('email').validate(function (email) {
-//     var emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-//     return emailRegex.test(email.text); // Assuming email has a text attribute
-//  }, 'The e-mail field cannot be empty.')
 
 const userSchema = new Schema(
     {
@@ -16,6 +13,13 @@ const userSchema = new Schema(
             type: String,
             required: true,
             unique: true,
+            validate: {
+                validator: function(v) {
+                  return emailRegex.test(v);
+                },
+                message: props => `${props.value} is not a valid email.`
+              },
+              required: [true, 'Email required']
         },
         thoughts: [
             {
