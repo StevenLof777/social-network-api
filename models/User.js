@@ -1,5 +1,10 @@
 const { Schema, model } = require('mongoose');
+const emailRegex = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8466b44d3e44679272d7ac13297ef06c3c77ab8d
 const userSchema = new Schema(
     {
         username: {
@@ -11,6 +16,13 @@ const userSchema = new Schema(
             type: String,
             required: true,
             unique: true,
+            validate: {
+                validator: function(v) {
+                  return emailRegex.test(v);
+                },
+                message: props => `${props.value} is not a valid email.`
+              },
+              required: [true, 'Email required']
         },
         thoughts: [
             {
