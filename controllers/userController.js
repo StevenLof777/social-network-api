@@ -1,4 +1,3 @@
-// match: [/.+@.+\..+/, 'Must be a valid email address!'],
 const User = require('../models/User')
 
 const getUsers = (req, res) => {
@@ -41,14 +40,27 @@ const updateUser = (req, res) => {
 }
 
 const deleteUser = (req, res) => {
-    User.findOneAndDelete({ _id: req.params.userId })
-    .then((user) =>
-    !user
-      ? res.status(404).json({ message: 'No user with that ID' })
-      : Student.deleteMany({ _id: { $in: user.students } })
+    Student.findOneAndRemove({ _id: req.params.studentId })
+    .then((student) =>
+      !student
+        ? res.status(404).json({ message: 'No such student exists' })
+        : Course.findOneAndUpdate(
+            { students: req.params.studentId },
+            { $pull: { students: req.params.studentId } },
+            { new: true }
+          )
     )
-    .then(() => res.json({ message: 'User deleted' }))
-    .catch((err) => res.status(500).json(err));
+    .then((course) =>
+      !course
+        ? res.status(404).json({
+            message: 'Student deleted, but no courses found',
+          })
+        : res.json({ message: 'Student successfully deleted' })
+    )
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 }
 
 const addFriend = (req, res) => {

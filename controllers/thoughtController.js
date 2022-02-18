@@ -1,6 +1,5 @@
 // match: [/.+@.+\..+/, 'Must be a valid email address!'],
-const User = require('../models/User')
-const Thought = require('../models/Thought')
+const { User, Reaction, Thought } = require('../models')
 
 const getThoughts = (req, res) => {
     Thought.find({})
@@ -59,7 +58,7 @@ const deleteThought = (req, res) => {
     .then((thought) =>
     !thought
       ? res.status(404).json({ message: 'No thought with that ID' })
-      : Student.deleteMany({ _id: { $in: thought.students } })
+      : Thought.deleteMany({ _id: { $in: thought.user } })
     )
     .then(() => res.json({ message: 'thought deleted' }))
     .catch((err) => res.status(500).json(err));
