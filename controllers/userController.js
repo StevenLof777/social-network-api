@@ -40,22 +40,22 @@ const updateUser = (req, res) => {
 }
 
 const deleteUser = (req, res) => {
-    Student.findOneAndRemove({ _id: req.params.studentId })
-    .then((student) =>
-      !student
-        ? res.status(404).json({ message: 'No such student exists' })
+    User.findOneAndRemove({ _id: req.params.userId })
+    .then((User) =>
+      !User
+        ? res.status(404).json({ message: 'No such User exists' })
         : Course.findOneAndUpdate(
-            { students: req.params.studentId },
-            { $pull: { students: req.params.studentId } },
+            { Users: req.params.userId },
+            { $pull: { Users: req.params.userId } },
             { new: true }
           )
     )
     .then((course) =>
       !course
         ? res.status(404).json({
-            message: 'Student deleted, but no courses found',
+            message: 'User deleted, but no courses found',
           })
-        : res.json({ message: 'Student successfully deleted' })
+        : res.json({ message: 'User successfully deleted' })
     )
     .catch((err) => {
       console.log(err);
@@ -82,7 +82,7 @@ const addFriend = (req, res) => {
 const deleteFriend = (req, res) => {
     User.findOneAndUpdate(
         { _id: req.params.userId },
-        { $pull: { friends: { responseId: req.params.userId } } },
+        { $pull: { friends: { friendId: req.params.friendId } } },
         { runValidators: true, new: true }
       )
         .then((user) =>
