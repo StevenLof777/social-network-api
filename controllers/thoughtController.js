@@ -1,6 +1,5 @@
 // match: [/.+@.+\..+/, 'Must be a valid email address!'],
-const User = require('../models/User')
-const Thought = require('../models/Thought')
+const { User, Reaction, Thought } = require('../models')
 
 const getThoughts = (req, res) => {
     Thought.find({})
@@ -55,11 +54,11 @@ const updateThought = (req, res) => {
 }
 
 const deleteThought = (req, res) => {
-    thought.findOneAndDelete({ _id: req.params.thoughtId })
+    Thought.findOneAndDelete({ _id: req.params.thoughtId })
     .then((thought) =>
     !thought
       ? res.status(404).json({ message: 'No thought with that ID' })
-      : Student.deleteMany({ _id: { $in: thought.students } })
+      : Thought.deleteMany({ _id: { $in: thought.user } })
     )
     .then(() => res.json({ message: 'thought deleted' }))
     .catch((err) => res.status(500).json(err));
@@ -80,17 +79,17 @@ const addReaction = (req, res) => {
 }
 
 const deleteReaction = (req, res) => {
-    Thought.findOneAndUpdate(
-        { _id: req.params.thoughtId },
-        { $pull: { reactions: { responseId: req.params.responseId } } },
-        { runValidators: true, new: true }
+  Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId },
+      { $pull: { reactions: { responseId: req.params.responseId } } },
+      { runValidators: true, new: true }
+    )
+      .then((thought) =>
+        !thought
+          ? res.status(404).json({ message: 'No thought with this id!' })
+          : res.json(thought)
       )
-        .then((thought) =>
-          !thought
-            ? res.status(404).json({ message: 'No thought with this id!' })
-            : res.json(thought)
-        )
-        .catch((err) => res.status(500).json(err));
+      .catch((err) => res.status(500).json(err));
 }
 
 module.exports = { createThought, getThoughts, getSingleThought, updateThought, deleteThought, addReaction, deleteReaction }

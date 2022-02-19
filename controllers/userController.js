@@ -1,4 +1,3 @@
-// match: [/.+@.+\..+/, 'Must be a valid email address!'],
 const User = require('../models/User')
 
 const getUsers = (req, res) => {
@@ -41,14 +40,27 @@ const updateUser = (req, res) => {
 }
 
 const deleteUser = (req, res) => {
-    User.findOneAndDelete({ _id: req.params.userId })
-    .then((user) =>
-    !user
-      ? res.status(404).json({ message: 'No user with that ID' })
-      : Student.deleteMany({ _id: { $in: user.students } })
+    User.findOneAndRemove({ _id: req.params.userId })
+    .then((User) =>
+      !User
+        ? res.status(404).json({ message: 'No such User exists' })
+        : Course.findOneAndUpdate(
+            { Users: req.params.userId },
+            { $pull: { Users: req.params.userId } },
+            { new: true }
+          )
     )
-    .then(() => res.json({ message: 'User deleted' }))
-    .catch((err) => res.status(500).json(err));
+    .then((course) =>
+      !course
+        ? res.status(404).json({
+            message: 'User deleted, but no courses found',
+          })
+        : res.json({ message: 'User successfully deleted' })
+    )
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
 }
 
 const addFriend = (req, res) => {
@@ -70,7 +82,7 @@ const addFriend = (req, res) => {
 const deleteFriend = (req, res) => {
     User.findOneAndUpdate(
         { _id: req.params.userId },
-        { $pull: { friends: { responseId: req.params.userId } } },
+        { $pull: { friends: { friendId: req.params.friendId } } },
         { runValidators: true, new: true }
       )
         .then((user) =>
